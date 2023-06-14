@@ -3,9 +3,12 @@
  * Using inquirer create a command line app to create an .svg logo of various shapes
  */
 
-const inquirer = require('inquirer')
-const fs = require('fs')
-const filePath = '../logo.svg'
+const inquirer = require('inquirer');
+const fs = require('fs');
+const filePath = '../logo.svg';
+const Square = require('./lib/square');
+const Triangle = require('./lib/triangle');
+const Circle = require('./lib/circle');
 
 const questions = [
     {
@@ -95,7 +98,7 @@ function renderShape(){
 async function init () {
     try{
         const answers = await inquirer.prompt(questions)
-
+        
         console.log(answers)
     }
     catch(error){
