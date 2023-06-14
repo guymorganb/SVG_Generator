@@ -2,108 +2,69 @@
  * JavaScript
  * Using inquirer create a command line app to create an .svg logo of various shapes
  */
-
+const filePath = './examples/logo.svg';
+const htmlPath = './examples/testSVG.HTML'
+const parseUserInput = require('./lib/parseInput')
+const data = require('./lib/inquirerQuestions')
 const inquirer = require('inquirer');
-const fs = require('fs');
-const filePath = '../logo.svg';
-const Square = require('./lib/square');
-const Triangle = require('./lib/triangle');
-const Circle = require('./lib/circle');
+const fs = require('fs-extra');
+const jsdom = require('jsdom')
+const { JSDOM } = jsdom 
+/*
+JSDOM is a class (constructor function) within the jsdom library. 
+So, when you use this line of code, 
+you're essentially creating a local variable named JSDOM that points to jsdom.JSDOM. 
+This is done so that we don't have to write jsdom.JSDOM each time 
+you want to use the JSDOM class.
+*/
 
-const questions = [
-    {
-        type: 'input',
-        name: 'logo',
-        message: 'What 3 charecters (number or letter) would you like inside your logo?',
-        validate: function (text){
-            if(text.length !== 3){
-                return 'Please enter only 3 charecters.'
-            }return true
-        },
-    },
-    {
-        type: 'list',
-        name: 'textColorType',
-        message: 'Please choose a color option for your text.',
-        choices: ['Color Name', 'Color Hex Value'],
-    },
-    {
-        type: 'input',
-        name: 'textColor',
-        message: 'Input your text color, please use CSS Standard specific colors only.',
-        when: function(answers) {
-            // checks the results from the previous question and returns the result
-            return answers.textColorType === 'Color Name' || answers.textColorType === 'Color Hex Value';
-        },
-            // validates the result of the current input according to what the answer was from the previous question
-        validate: function (input, answers){
-            // if color name was selected, do this...
-            if(answers.textColorType === 'Color Name'){
-                input = input.toLowerCase();
-                return input.length > 2 || 'Please enter a valid color name';
-            // if color hex value was selected do this.....    
-            }else if(answers.textColorType === 'Color Hex Value'){
-                var pattern =  /^#?([0-9A-F]{3}|[0-9A-F]{6})$/i;
-                // validate the hex pattern 
-                if(!pattern.test(input)){
-                    return 'Invalid Hex combination please try again'
-                }
-                return true;
-            }
-        },
-    },
-    {
-        type: 'list',
-        name: 'shape',
-        message: 'What shape would you like the logo to be?',
-        choices: ['Square', 'Circle', 'Triangle'],
-    },
-    {
-        type: 'list',
-        name: 'shapeColorType',
-        message: 'Please Choose color format for your shape.',
-        choices: ['Color Name', 'Color Hex Value'],
-    },
-    {
-        type: 'input',
-        name: 'shapeColor',
-        message: 'Input your shapes color, please use CSS Standard specific colors only.',
-        when: function(answers){
-            // get the answer from the previous question and return the result
-            return answers.shapeColorType === 'Color Name' || answers.shapeColorType === 'Color Hex Value';
-        },
-            // validate the result of the current input, according to what the answer was from the previous question 
-        validate: function(input, answers){
-            // if color name was selected do this...
-            if(answers.shapeColorType === 'Color Name'){
-                input = input.toLowerCase();
-                return input.length > 2 || 'Please enter a valid color name';
-            // if color hex value was selected do this...
-            }else if(answers.shapeColorType === 'Color Hex Value'){
-                var pattern =  /^#?([0-9A-F]{3}|[0-9A-F]{6})$/i;
-                // validate hex pattern
-                if(!pattern.test(input)){
-                    return 'Invalid Hex combination please try again';
-                }
-                return true;
-            }
-        },
-    },
-];
-
-function renderShape(){
-
+async function insertSvg() {
+    try{
+        // Load the HTML file
+        const html = await fs.readFile(htmlPath, 'utf-8');
+        // Load the SVG file
+        const svg = await fs.readFile(filePath, 'utf-8');
+        // Parse the HTML file with jsdom
+        const dom = new JSDOM(html);
+        const document = dom.window.document;
+        // Find the div where the SVG should be inserted
+        const div = document.getElementById("svgs");    
+    // Note: because we are using node.js we dont need to include a script tag on the HTML doc being written to
+         // Check if the SVG content already exists in the HTML file and insert the SVG
+         if (!div.innerHTML.includes(svg)) {
+            // If it doesn't exist, append the SVG content
+            div.innerHTML += svg;
+        }
+        // Write the updated HTML back to the file
+        await fs.writeFile(htmlPath, dom.serialize());
+    }
+    catch(error){
+        console.log('Error Writing to HTML: ', error)
+    }
 }
 
-async function init () {
+async function init (data) {
+    // handling errors
     try{
-        const answers = await inquirer.prompt(questions)
-        
-        console.log(answers)
+        const answers = await inquirer.prompt(data)
+        const logo = parseUserInput(answers)
+        fs.appendFile(filePath, logo + '\n', error =>{
+            // handling errors
+            if(error){
+                console.log("Error:", error)
+                return;
+            }console.log(`Logo successfully written to ${filePath}.`)
+        }) 
     }
     catch(error){
         console.log("Error", error)
+        return
+    }
+    finally{
+        insertSvg()
     }
 }
-init()
+
+init(data)
+
 
