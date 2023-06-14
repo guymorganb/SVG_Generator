@@ -21,13 +21,13 @@ const questions = [
     {
         type: 'list',
         name: 'textColorType',
-        message: 'Please choose a color option.',
+        message: 'Please choose a color option for your text.',
         choices: ['Color Name', 'Color Hex Value'],
     },
     {
         type: 'input',
         name: 'textColor',
-        message: 'Input your color, please use CSS Standard specific colors only.',
+        message: 'Input your text color, please use CSS Standard specific colors only.',
         when: function(answers) {
             // checks the results from the previous question and returns the result
             return answers.textColorType === 'Color Name' || answers.textColorType === 'Color Hex Value';
@@ -64,7 +64,7 @@ const questions = [
     {
         type: 'input',
         name: 'shapeColor',
-        message: 'Input your color, please use CSS Standard specific colors only.',
+        message: 'Input your shapes color, please use CSS Standard specific colors only.',
         when: function(answers){
             // get the answer from the previous question and return the result
             return answers.shapeColorType === 'Color Name' || answers.shapeColorType === 'Color Hex Value';
