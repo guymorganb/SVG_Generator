@@ -12,6 +12,9 @@
 
   ![step 2](https://github.com/guymorganb/SVG_Generator/blob/main/images/SVG_run.png?raw=true)
 
+  ##  Link to video-walkthrough
+  - https://drive.google.com/file/d/1-Ivwdc8XjPJXw53fghIyVkRP3CG6ZuA4/view?usp=sharing
+
   ## Table of Contents
   - [Installation](#installation)
   - [Usage](#usage)
