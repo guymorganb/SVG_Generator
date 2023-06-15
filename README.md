@@ -8,9 +8,9 @@
   - A command line app used to create SVG logos
   
   - Images of the project
-  ![step 1](https://github.com/guymorganb/Pet-Search/blob/main/assets/secondaryAssests/FirstPageInfo.png?raw=true)
+  ![step 1](https://github.com/guymorganb/SVG_Generator/blob/main/images/SVG_Test.png?raw=true)
 
-  ![step 2](https://github.com/guymorganb/Pet-Search/blob/main/assets/secondaryAssests/SearchPage.png?raw=true)
+  ![step 2](https://github.com/guymorganb/SVG_Generator/blob/main/images/SVG_run.png?raw=true)
 
   ## Table of Contents
   - [Installation](#installation)
@@ -26,6 +26,10 @@
   
   ## Questions
   - Please reach out to guymorganb@gmail.com to answer questions about this project and follow this link to GitHub. https://github.com/guymorganb
+
+  ## Credits
+
+  EDx University of Denver.
 
   ## License
   - MIT License
